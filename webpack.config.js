@@ -8,7 +8,7 @@ process.env.NODE_ENV = 'development'
 module.exports = {
     entry: ['./src/index.js', './src/index.html'],
     output: {
-        filename: "js/index.js",
+        filename: "js/index.[contenthash:10].js",
         path: resolve(__dirname, 'build')
     },
     module: {
@@ -97,7 +97,8 @@ module.exports = {
                                 }
                             }
                         ]
-                    ]
+                    ],
+                    cacheDirectory: true
                 }
             }
         ]
@@ -113,10 +114,17 @@ module.exports = {
             // }
         }),
         new MiniCssExtractPlugin({
-            filename: 'index.css'
+            filename: 'index.[contenthash:10].css'
         }),
         // new OptimizeCssAssetsWebpackPlugin()
     ],
+    // 将node_modules中代码单独打包为一个chunk最终输出
+    // 自动分析多入口chunk，有没有公共文件。若果有会单独打包为一个chunk
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    },
     mode: 'development',
     // 只在内存中打包
     // 启动devServer: webpack-dev-server(npm i webpack-dev-server -D)，运行：npx webpack-dev-server

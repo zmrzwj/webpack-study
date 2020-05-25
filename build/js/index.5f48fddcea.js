@@ -132,6 +132,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./font-awesome/css/font-awesome.css */ "./src/font-awesome/css/font-awesome.css");
 /* harmony import */ var _font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_font_awesome_css_font_awesome_css__WEBPACK_IMPORTED_MODULE_1__);
+!(function webpackMissingModule() { var e = new Error("Cannot find module 'print'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+
 
 
 
@@ -145,8 +147,6 @@ var zwjFunction = function a(n, m) {
 
 add(1, 2);
 zwjFunction(1, 2);
-
-if (false) {}
 
 /***/ }),
 
@@ -175,4 +175,4 @@ module.exports = __webpack_require__(/*! ./src/index.html */"./src/index.html");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.5f48fddcea.js.map
