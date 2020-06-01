@@ -2,6 +2,10 @@ const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const WorkBoxPlugin = require('workbox-webpack-plugin')
+
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+const webpack = require('webpack')
 
 process.env.NODE_ENV = 'development'
 
@@ -9,7 +13,8 @@ module.exports = {
     entry: ['./src/index.js', './src/index.html'],
     output: {
         filename: "js/index.[contenthash:10].js",
-        path: resolve(__dirname, 'build')
+        path: resolve(__dirname, 'dll'),
+        library: '[name]_[hash]'
     },
     module: {
         rules: [
@@ -80,26 +85,37 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
                 exclude: /node_modules/,
-                options: {
-                    presets: [
-                        [
-                            '@babel/preset-env',
-                            {
-                                useBuiltIns: 'usage',
-                                corejs: {
-                                    version: 3
-                                },
-                                targets: {
-                                    chrome: '60',
-                                    ie: '9'
-                                }
-                            }
-                        ]
-                    ],
-                    cacheDirectory: true
-                }
+                use: [
+                    {
+                        loader: 'thread-loader',
+                        options: {
+                            workers: 2
+                        }
+                    },
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                [
+                                    '@babel/preset-env',
+                                    {
+                                        useBuiltIns: 'usage',
+                                        corejs: {
+                                            version: 3
+                                        },
+                                        targets: {
+                                            chrome: '60',
+                                            ie: '9'
+                                        }
+                                    }
+                                ]
+                            ],
+                            cacheDirectory: true
+                        }
+                    }
+                ]
+
             }
         ]
     },
@@ -116,6 +132,18 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'index.[contenthash:10].css'
         }),
+        new WorkBoxPlugin.GenerateSW({
+            clientsClaim: true, // 新的 Service Worker 被激活后使其立即获得页面控制权
+            skipWaiting: true // 强制等待中的 Service Worker 被激活
+        }),
+        // 告诉哪些包不参与打印
+        new webpack.DllReferencePlugin({
+            manifest: resolve(__dirname, 'dll/manifest.json')
+        }),
+        // 将某个文件打包输出，并在html中自动引入改资源
+        new AddAssetHtmlWebpackPlugin({
+            filepath: resolve(__dirname, 'dll/js/jquery.js')
+        })
         // new OptimizeCssAssetsWebpackPlugin()
     ],
     // 将node_modules中代码单独打包为一个chunk最终输出
@@ -135,5 +163,8 @@ module.exports = {
         open: true,
         hot: true
     },
-    devtool: "source-map"
+    devtool: "source-map",
+    externals: {
+        jquery: 'jQuery'
+    }
 }

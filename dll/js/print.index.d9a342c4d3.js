@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
+(window["webpackJsonp_name_hash_"] = window["webpackJsonp_name_hash_"] || []).push([["print"],{
 
 /***/ "./src/print.js":
 /*!**********************!*\
@@ -7,9 +7,9 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-console.log("print");
+console.log('print');
 
 /***/ })
 
 }]);
-//# sourceMappingURL=0.index.a6fc8f9b2f.js.map
+//# sourceMappingURL=print.index.d9a342c4d3.js.map

@@ -4,7 +4,7 @@
 /******/ 		var chunkIds = data[0];
 /******/ 		var moreModules = data[1];
 /******/ 		var executeModules = data[2];
-/******/
+/******/ 		var prefetchChunks = data[3] || [];
 /******/ 		// add "moreModules" to the modules object,
 /******/ 		// then flag all "chunkIds" as loaded and fire callback
 /******/ 		var moduleId, chunkId, i = 0, resolves = [];
@@ -21,7 +21,7 @@
 /******/ 			}
 /******/ 		}
 /******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
+/******/ 		deferredPrefetch.push.apply(deferredPrefetch, prefetchChunks);
 /******/ 		while(resolves.length) {
 /******/ 			resolves.shift()();
 /******/ 		}
@@ -46,7 +46,24 @@
 /******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
 /******/ 			}
 /******/ 		}
+/******/ 		if(deferredModules.length === 0) {
+/******/ 			// chunk prefetching for javascript
+/******/ 			deferredPrefetch.forEach(function(chunkId) {
+/******/ 				if(installedChunks[chunkId] === undefined) {
+/******/ 					installedChunks[chunkId] = null;
+/******/ 					var link = document.createElement('link');
 /******/
+/******/ 					if (__webpack_require__.nc) {
+/******/ 						link.setAttribute("nonce", __webpack_require__.nc);
+/******/ 					}
+/******/ 					link.rel = "prefetch";
+/******/ 					link.as = "script";
+/******/ 					link.href = jsonpScriptSrc(chunkId);
+/******/ 					document.head.appendChild(link);
+/******/ 				}
+/******/ 			});
+/******/ 			deferredPrefetch.length = 0;
+/******/ 		}
 /******/ 		return result;
 /******/ 	}
 /******/
@@ -60,11 +77,11 @@
 /******/ 		"main": 0
 /******/ 	};
 /******/
-/******/ 	var deferredModules = [];
+/******/ 	var deferredModules = [], deferredPrefetch = [];
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + chunkId + ".index." + {"0":"a6fc8f9b2f"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "js/" + chunkId + ".index." + {"print":"8b49d4a37c"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -216,10 +233,15 @@
 /******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
 /******/
+/******/ 	var startupResult = (function() {
 /******/ 	// add entry module to deferred list
 /******/ 	deferredModules.push([0,"vendors~main"]);
 /******/ 	// run deferred modules when ready
 /******/ 	return checkDeferredModules();
+/******/ 	})();
+/******/
+/******/ 	webpackJsonpCallback([[], {}, 0, ["print"]]);
+/******/ 	return startupResult;
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -279,7 +301,7 @@ __webpack_require__.r(__webpack_exports__);
 
  // import 'print';
 
-__webpack_require__.e(/*! import() */ 0).then(__webpack_require__.t.bind(null, /*! ./print */ "./src/print.js", 7)).then(function (res) {
+__webpack_require__.e(/*! import() | print */ "print").then(__webpack_require__.t.bind(null, /*! ./print */ "./src/print.js", 7)).then(function (res) {
   console.log(res);
 }).catch(function () {});
 
@@ -292,7 +314,16 @@ var zwjFunction = function a(n, m) {
 };
 
 add(1, 2);
-zwjFunction(1, 2);
+zwjFunction(1, 2); // 注册serviceworker
+// 处理兼容问题
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/service-worker.js').then(function () {
+      console.log('sw注册成功！');
+    });
+  });
+}
 
 /***/ }),
 
@@ -321,4 +352,4 @@ module.exports = __webpack_require__(/*! ./src/index.html */"./src/index.html");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=index.beac3c3480.js.map
+//# sourceMappingURL=index.6d4379398a.js.map

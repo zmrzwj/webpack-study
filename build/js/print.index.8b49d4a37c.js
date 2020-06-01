@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["test"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["print"],{
 
 /***/ "./src/print.js":
 /*!**********************!*\
@@ -12,4 +12,4 @@ console.log('print');
 /***/ })
 
 }]);
-//# sourceMappingURL=test.index.83fdb6187c.js.map
+//# sourceMappingURL=print.index.8b49d4a37c.js.map

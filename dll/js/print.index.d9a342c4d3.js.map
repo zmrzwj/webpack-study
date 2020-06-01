@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://[name]_[hash]/./src/print.js"],"names":["console","log"],"mappings":";;;;;;;;;AAAAA,OAAO,CAACC,GAAR,CAAY,OAAZ,E","file":"js/print.index.d9a342c4d3.js","sourcesContent":["console.log('print');\n"],"sourceRoot":""}
